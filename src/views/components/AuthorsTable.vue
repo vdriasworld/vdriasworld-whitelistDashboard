@@ -28,8 +28,8 @@
                 </span>
             </td>
             <td class="align-middle text-center actions pt-4">
-              <button class="btn btn-success btn-sm" @click="showModal(item.uuid, 'accept')">Accept</button>
-              <button class="btn btn-danger btn-sm ms-2" @click="showModal(item.uuid, 'reject')">Reject</button>
+              <button class="btn btn-success btn-sm" @click="showModal(item.item.uuid, 'accept')">Accept</button>
+              <button class="btn btn-danger btn-sm ms-2" @click="showModal(item.item.uuid, 'reject')">Reject</button>
             </td>
           </tr>
           </tbody>
@@ -43,7 +43,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
-          <button type="button" class="close" aria-label="Close" @click="closeModal">
+          <button type="button" class="close" aria-label="Close" @click="closeModal" ref="someButtonRef">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -93,13 +93,14 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.$refs.someButtonRef.focus();
     },
     async confirmAction() {
       const status = this.actionType === 'accept' ? 'accepted' : 'rejected';
       try {
-        await axios.get(`http://localhost:19198/lists/${this.selectedUuid}`, { status });
+        await axios.put(`http://localhost:19198/lists/${this.selectedUuid}`, { status });
         this.closeModal();
-        this.fetchAuthors(); // 更新列表
+        this.fetchAuthors();
         alert(`Author has been ${this.actionText}ed.`);
       } catch (error) {
         console.error(`Error updating status for UUID ${this.selectedUuid}:`, error);
