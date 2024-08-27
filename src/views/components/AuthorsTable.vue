@@ -180,4 +180,41 @@ export default {
   display: block;
   background: rgba(0, 0, 0, 0.5);
 }
+
+.modal-dialog {
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  border-radius: 0.375rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.close {
+  margin: -0.5rem -0.5rem -0.5rem auto;
+  padding: 0.5rem;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+.close span {
+  font-size: 1.5rem;
+  line-height: 1;
+}
 </style>
