@@ -1,30 +1,36 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import { MongoClient } from 'mongodb';
 
 const app = express();
 const port = 19198;
 
+const uri = 'mongodb://localhost:27017';
+
+const client = new MongoClient(uri);
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/main', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('debug', true);
-
-const itemSchema = new mongoose.Schema({
-    uuid: String,
-    name: String,
-    time: String,
-    status: String
-});
-
-const Item = mongoose.model('main', itemSchema, 'list');
+async function connectToDatabase() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        process.exit(1);
+    }
+}
 
 app.get('/lists', async (req, res) => {
     try {
-        const items = await Item.find();
+        const database = client.db('main');
+        const collection = database.collection('list');
+
+        const items = await collection.find().toArray();
         res.json(items);
     } catch (err) {
+        console.error('Error fetching items:', err);
         res.status(500).send(err);
     }
 });
@@ -33,24 +39,23 @@ app.put('/lists/:uuid', async (req, res) => {
     const uuid = req.params.uuid;
     const { status } = req.body;
 
-    //dev log
-    console.log('Database name:', mongoose.connection.name);
-    console.log('Collection name:', Item.collection.name);
-    console.log('Updating item with UUID:', uuid);
-    console.log('New status:', status);
-    console.log('Status type:', typeof status);
-    console.log('Connected to database:', mongoose.connection.db.databaseName);
-    console.log('Query condition:', { uuid: uuid });
-    console.log('Update data:', { $set: { status: status } });
-
-    const item = await Item.find();
-    console.log(item);
-
     try {
-        const updateResult = await Item.updateOne(
+        const database = client.db('main');
+        const collection = database.collection('list');
+
+        // Debug logs
+        console.log('Connected to database:', database.databaseName);
+        console.log('Collection name:', collection.collectionName);
+        console.log('Updating item with UUID:', uuid);
+        console.log('New status:', status);
+
+        const query = { name: "sb" };
+        const test = await collection.findOne({});
+        console.log(test);
+
+        const updateResult = await collection.updateOne(
             { uuid: uuid },
-            { $set: { status: status } },
-            { writeConcern: { w: 1 } }
+            { $set: { status: status } }
         );
 
         console.log('Update result:', updateResult);
@@ -63,14 +68,15 @@ app.put('/lists/:uuid', async (req, res) => {
             return res.status(304).send('Status not modified');
         }
 
-        const updatedItem = await Item.findOne({ uuid: uuid });
+        const updatedItem = await collection.findOne({ uuid: uuid });
         res.json(updatedItem);
     } catch (err) {
-        console.error('Error during update:', err);
+        console.error('Error updating item:', err);
         res.status(500).send(err);
     }
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    await connectToDatabase();
     console.log(`Server running at http://localhost:${port}`);
 });

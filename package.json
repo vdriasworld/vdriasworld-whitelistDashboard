@@ -9,6 +9,7 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/vue-argon-dashboard/issues"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/creativetimofficial/vue-argon-dashboard.git"
