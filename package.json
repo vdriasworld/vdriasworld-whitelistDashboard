@@ -1,18 +1,18 @@
 {
-  "name": "vue-argon-dashboard-2",
-  "version": "4.0.0",
+  "name": "vdriasworld-whitelistDashboard",
+  "version": "11.45.14",
   "private": true,
-  "author": "Creative Tim",
-  "license": "SEE LICENSE IN <https://www.creative-tim.com/license>",
-  "description": "VueJS version of Argon Dashboard 2 by Creative Tim",
-  "homepage": "https://demos.creative-tim.com/vue-argon-dashboard/",
+  "author": "Lemon-miaow",
+  "license": "MIT License",
+  "description": "A whitelist dashboard",
+  "homepage": "",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/vue-argon-dashboard/issues"
+    "url": "https://github.com/vdriasworld/vdriasworld-whitelistDashboard/issues"
   },
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/vue-argon-dashboard.git"
+    "url": "git+https://github.com/vdriasworld/vdriasworld-whitelistDashboard.git"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
