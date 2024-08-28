@@ -19,17 +19,17 @@
           <tbody>
           <tr v-for="(item, index) in authors" :key="item._id">
             <td><p class="text-xs font-weight-bold mb-0">{{ index + 1 }}</p></td>
-            <td><p class="text-xs text-secondary mb-0">{{ item.item.name }}</p></td>
-            <td><p class="text-xs text-secondary mb-0">{{ item.item.uuid }}</p></td>
-            <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ item.item.time }}</span></td>
+            <td><p class="text-xs text-secondary mb-0">{{ item.name }}</p></td>
+            <td><p class="text-xs text-secondary mb-0">{{ item.uuid }}</p></td>
+            <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ item.time }}</span></td>
             <td class="align-middle text-center text-sm">
-                <span :class="['badge badge-sm', statusClass(item.item.status)]">
-                  {{ item.item.status }}
+                <span :class="['badge badge-sm', statusClass(item.status)]">
+                  {{ item.status }}
                 </span>
             </td>
             <td class="align-middle text-center actions pt-4">
-              <button class="btn btn-success btn-sm" @click="showModal(item.item.uuid, 'accept')">Accept</button>
-              <button class="btn btn-danger btn-sm ms-2" @click="showModal(item.item.uuid, 'reject')">Reject</button>
+              <button class="btn btn-success btn-sm" @click="showModal(item.uuid, 'accept')">Accept</button>
+              <button class="btn btn-danger btn-sm ms-2" @click="showModal(item.uuid, 'reject')">Reject</button>
             </td>
           </tr>
           </tbody>
@@ -101,7 +101,6 @@ export default {
         await axios.put(`http://localhost:19198/lists/${this.selectedUuid}`, { status });
         this.closeModal();
         this.fetchAuthors();
-        alert(`Author has been ${this.actionText}ed.`);
       } catch (error) {
         console.error(`Error updating status for UUID ${this.selectedUuid}:`, error);
       }
