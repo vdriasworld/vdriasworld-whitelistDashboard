@@ -9,7 +9,6 @@
   "bugs": {
     "url": "https://github.com/vdriasworld/vdriasworld-whitelistDashboard/issues"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vdriasworld/vdriasworld-whitelistDashboard.git"
