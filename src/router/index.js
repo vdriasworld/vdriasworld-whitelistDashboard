@@ -20,11 +20,6 @@ const routes = [
     component: List,
   },
   {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-  },
-  {
     path: "/signin",
     name: "Signin",
     component: Signin,
