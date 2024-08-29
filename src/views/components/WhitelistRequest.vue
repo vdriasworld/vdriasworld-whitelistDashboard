@@ -76,6 +76,12 @@ export default {
   created() {
     this.fetchAuthors();
   },
+  computed: {
+    isLoggedIn() {
+      // Replace with actual login check logic
+      return !!localStorage.getItem('userToken');
+    }
+  },
   methods: {
     async fetchAuthors() {
       try {
@@ -86,6 +92,12 @@ export default {
       }
     },
     showModal(uuid, action) {
+      if (!this.isLoggedIn) {
+        alert('You need to be logged in to perform this action.');
+        // Optionally, redirect to login page
+        // this.$router.push('/login');
+        return;
+      }
       this.selectedUuid = uuid;
       this.actionType = action;
       this.actionText = action === 'accept' ? 'Accept' : 'Reject';
