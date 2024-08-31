@@ -148,7 +148,7 @@ export default {
   padding: 0.5rem;
 }
 
-.uuid, .author, .method {
+.uuid, .method {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -173,11 +173,11 @@ export default {
   align-items: center;
 }
 
-.actions .text-success {
+.actions {
   margin-right: 4px;
 }
 
-.actions .text-danger {
+.actions {
   margin-left: 4px;
 }
 
@@ -185,21 +185,6 @@ export default {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1.5;
-}
-
-.bg-gradient-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.bg-gradient-danger {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.bg-gradient-secondary {
-  background-color: #6c757d;
-  color: #fff;
 }
 
 .modal.show {
