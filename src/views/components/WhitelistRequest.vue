@@ -10,7 +10,8 @@
           <tr>
             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">UUID</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 uuid">UUID</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 method">Method</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
@@ -20,7 +21,8 @@
           <tr v-for="(item, index) in authors" :key="item._id">
             <td><p class="text-xs font-weight-bold mb-0">{{ index + 1 }}</p></td>
             <td><p class="text-xs text-secondary mb-0">{{ item.name }}</p></td>
-            <td><p class="text-xs text-secondary mb-0">{{ item.uuid }}</p></td>
+            <td><p class="text-xs text-secondary mb-0 uuid">{{ item.uuid }}</p></td>
+            <td><p class="text-xs text-secondary mb-0 method">{{ item.method }}</p></td>
             <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ item.time }}</span></td>
             <td class="align-middle text-center text-sm">
                 <span :class="['badge badge-sm', statusClass(item.status)]">
@@ -85,7 +87,10 @@ export default {
     async fetchAuthors() {
       try {
         const response = await axios.get('http://localhost:19198/lists');
-        this.authors = response.data;
+        this.authors = response.data.map(item => ({
+          ...item,
+          method: item.method || 'Unknown'
+        }));
       } catch (error) {
         console.error('Error fetching authors:', error);
       }
@@ -93,8 +98,6 @@ export default {
     showModal(uuid, action) {
       if (!this.isLoggedIn) {
         alert('You need to be logged in to perform this action.');
-        // Optionally, redirect to login page
-        // this.$router.push('/login');
         return;
       }
       this.selectedUuid = uuid;
@@ -145,11 +148,15 @@ export default {
   padding: 0.5rem;
 }
 
-.uuid, .author {
+.uuid, .author, .method {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+}
+
+.uuid, .method {
+  padding-right: 0.2rem;
 }
 
 .actions {
