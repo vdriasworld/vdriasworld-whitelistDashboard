@@ -16,20 +16,18 @@ const rememberMe = ref(false);
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post('your-backend-url/api/login', {
+    const response = await axios.post('http://localhost:19198/api/login', {
       email: email.value,
       password: password.value,
     });
 
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      alert('Login successful!');
-      // Redirect to another page or perform other actions
     } else {
-      alert('Login failed: Invalid credentials');
+      console.error('Error logging in:', response.data);
     }
   } catch (error) {
-    alert(`Login failed: ${error.response ? error.response.data.message : error.message}`);
+    console.error('Error logging in:', error);
   }
 };
 

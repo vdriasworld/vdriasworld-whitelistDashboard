@@ -16,7 +16,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "cross-env CI=false; cross-env PUBLIC_URL=/ vue-cli-service build",
-    "backend": "node src/backend/WhitelistRequest.ts",
+    "backend": "node src/backend/main.ts",
     "start": "concurrently \"npm run backend\" \"npm run build\" \"npm run serve",
     "lint": "vue-cli-service lint",
     "prettify": "prettier --write ."
@@ -24,12 +24,15 @@
   "dependencies": {
     "@popperjs/core": "2.11.8",
     "axios": "^1.7.4",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "5.3.3",
     "chart.js": "4.4.1",
+    "concurrently": "^8.2.2",
     "core-js": "3.36.0",
     "cors": "^2.8.5",
     "dropzone": "6.0.0-beta.2",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3",
     "quill": "1.3.7",
     "vue": "3.4.19",
