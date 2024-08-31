@@ -2,20 +2,22 @@
 import { ref } from 'vue';
 import { onBeforeUnmount, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
-// import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
+const router = useRouter();
 const email = ref('');
 const password = ref('');
-// const rememberMe = ref(false);
+const errorMessage = ref('');
 
 const handleLogin = async () => {
   try {
+    errorMessage.value = '';
     const response = await axios.post('http://localhost:19198/api/login', {
       email: email.value,
       password: password.value,
@@ -23,10 +25,12 @@ const handleLogin = async () => {
 
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
+      router.push('/dashboard');
     } else {
-      console.error('Error logging in:', response.data);
+      errorMessage.value = 'Login failed. Please try again.';
     }
   } catch (error) {
+    errorMessage.value = 'Invalid email or password.';
     console.error('Error logging in:', error);
   }
 };
@@ -91,13 +95,9 @@ onBeforeUnmount(() => {
                           size="lg"
                       />
                     </div>
-<!--                    <argon-switch-->
-<!--                        id="rememberMe"-->
-<!--                        name="remember-me"-->
-<!--                        v-model="rememberMe"-->
-<!--                    >Remember me-->
-<!--                    </argon-switch-->
-<!--                    >-->
+                    <div v-if="errorMessage" class="text-danger mb-3">
+                      {{ errorMessage }}
+                    </div>
                     <div class="text-center">
                       <argon-button
                           class="mt-4"
