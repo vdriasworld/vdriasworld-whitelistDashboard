@@ -23,6 +23,17 @@ async function connectToDatabase() {
     }
 }
 
+async function clearTokens() {
+    try {
+        const database = client.db('main');
+        const tokenCollection = database.collection('token');
+        await tokenCollection.deleteMany({});
+        console.log('Cleared all tokens in collection');
+    } catch (err) {
+        console.error('Error clearing tokens:', err);
+    }
+}
+
 app.get('/lists', async (req, res) => {
     try {
         const database = client.db('main');
@@ -39,12 +50,19 @@ app.get('/lists', async (req, res) => {
 app.put('/lists/:uuid', async (req, res) => {
     const uuid = req.params.uuid;
     const { status } = req.body;
+    const tokenFromClient = req.headers.authorization;
 
     try {
         const database = client.db('main');
-        const collection = database.collection('list');
+        const tokenCollection = database.collection('token');
+        const tokenRecord = await tokenCollection.findOne({ token: tokenFromClient });
 
-        const updateResult = await collection.updateOne(
+        if (!tokenRecord) {
+            return res.status(403).send('Unauthorized: Invalid token');
+        }
+
+        const listCollection = database.collection('list');
+        const updateResult = await listCollection.updateOne(
             { uuid: uuid },
             { $set: { status: status } }
         );
@@ -59,7 +77,7 @@ app.put('/lists/:uuid', async (req, res) => {
             return res.status(304).send('Status not modified');
         }
 
-        const updatedItem = await collection.findOne({ uuid: uuid });
+        const updatedItem = await listCollection.findOne({ uuid: uuid });
         res.json(updatedItem);
     } catch (err) {
         console.error('Error updating item:', err);
@@ -86,6 +104,9 @@ app.post('/api/login', async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '1h' });
 
+        const tokenCollection = database.collection('token');
+        await tokenCollection.insertOne({ token, userId: user._id, createdAt: new Date() });
+
         return res.json({ token });
     } catch (err) {
         console.error('Error during login:', err);
@@ -95,5 +116,6 @@ app.post('/api/login', async (req, res) => {
 
 app.listen(port, async () => {
     await connectToDatabase();
+    await clearTokens();
     console.log(`Server running at http://localhost:${port}`);
 });

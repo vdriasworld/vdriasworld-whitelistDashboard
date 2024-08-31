@@ -78,7 +78,6 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      // Replace with actual login check logic
       return !!localStorage.getItem('userToken');
     }
   },
@@ -108,13 +107,22 @@ export default {
       this.$refs.someButtonRef.focus();
     },
     async confirmAction() {
+      if (!this.isLoggedIn) {
+        alert('You need to be logged in to perform this action.');
+        return;
+      }
+
       const status = this.actionType === 'accept' ? 'accepted' : 'rejected';
       try {
-        await axios.put(`http://localhost:19198/lists/${this.selectedUuid}`, { status });
+        await axios.put(`http://localhost:19198/lists/${this.selectedUuid}`,
+            { status },
+            { headers: { Authorization: `Bearer ${localStorage.getItem('userToken')}` } }
+        );
         this.closeModal();
         this.fetchAuthors();
       } catch (error) {
         console.error(`Error updating status for UUID ${this.selectedUuid}:`, error);
+        alert('Failed to update status. Please check your token or try again after sign in.');
       }
     },
     statusClass(status) {
