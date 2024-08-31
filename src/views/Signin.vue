@@ -5,14 +5,14 @@ import { useStore } from 'vuex';
 import axios from 'axios';
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
-import ArgonSwitch from "@/components/ArgonSwitch.vue";
+// import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
 const email = ref('');
 const password = ref('');
-const rememberMe = ref(false);
+// const rememberMe = ref(false);
 
 const handleLogin = async () => {
   try {
@@ -91,13 +91,13 @@ onBeforeUnmount(() => {
                           size="lg"
                       />
                     </div>
-                    <argon-switch
-                        id="rememberMe"
-                        name="remember-me"
-                        v-model="rememberMe"
-                    >Remember me
-                    </argon-switch
-                    >
+<!--                    <argon-switch-->
+<!--                        id="rememberMe"-->
+<!--                        name="remember-me"-->
+<!--                        v-model="rememberMe"-->
+<!--                    >Remember me-->
+<!--                    </argon-switch-->
+<!--                    >-->
                     <div class="text-center">
                       <argon-button
                           class="mt-4"
