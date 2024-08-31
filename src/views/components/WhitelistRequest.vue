@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return !!localStorage.getItem('userToken');
+      return !!localStorage.getItem('token');
     }
   },
   methods: {
@@ -116,7 +116,7 @@ export default {
       try {
         await axios.put(`http://localhost:19198/lists/${this.selectedUuid}`,
             { status },
-            { headers: { Authorization: `Bearer ${localStorage.getItem('userToken')}` } }
+            { headers: { Authorization: `${localStorage.getItem('token')}` } }
         );
         this.closeModal();
         this.fetchAuthors();
